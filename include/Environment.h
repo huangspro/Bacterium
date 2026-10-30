@@ -7,8 +7,13 @@
 
 class Environment{
 private:
-
+    Substance substance;
+    bool has_bacterium;
+    int height, width;
+    
 public:
+    Environment(int h, int w);
+    
 };
 
 #endif
