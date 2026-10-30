@@ -1,6 +1,10 @@
 #include "Substance.h"
 
-Substance::Substance(std::string name, double con){
-    this->name = name;
-    this->concentratoin = con;
+Substance::Substance(std::vector<Substance> all){
+    this->all = all;
+}
+
+double getCon(std::string name){
+    for(auto i:all)if(i.name == name)return i.concentration;
+    return -1;
 }

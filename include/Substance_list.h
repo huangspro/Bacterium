@@ -9,9 +9,10 @@
 
 class SubstanceList{
 private:
-    std::vector<Substance>
+    std::vector<Substance> all;
 public:
-    Substance(std::string name, double con);
+    SubstanceList(std::vector<Substance> all);
+    double getCon(std::string name);
 };
 
 #endif
