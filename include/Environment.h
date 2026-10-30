@@ -5,6 +5,7 @@
 #include<string>
 #include<vector>
 
+// a grid in all environment
 class Environment{
 private:
     Substance substance;
@@ -13,7 +14,8 @@ private:
     
 public:
     Environment(int h, int w);
-    
+    void insert_bac(Bacterium *bac);
+    void init_env();
 };
 
 #endif
