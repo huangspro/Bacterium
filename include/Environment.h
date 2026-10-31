@@ -17,7 +17,6 @@ public:
 
     Environment(int h, int w);
     void insert_bac(Bacterium *bac);
-    void insert_sub(Substance *sub);
     Bacterium* getBac();
     Substance* getSub();
     ~Environment();

@@ -22,7 +22,7 @@ public:
     void move();
     Bacterium divide();
     void grow();
-    void impair_health(int i);
+    void impair_health(double i);
     void breathe();
 
     void touched();

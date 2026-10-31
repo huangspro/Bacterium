@@ -2,13 +2,17 @@
 #define _SUBSTANCE_H_
 
 #include<string>
+#include<map>
+
 
 class Substance{
 public:
-    std::string name;
-    double concentration;
+    std::map<std::string, double> all;
 
-    Substance(std::string name, double con);
+    Substance();
+    void add(std::string name, double con);
+    void change(std::string name, double delta);
+    double get(std::string name);
 };
 
 #endif
