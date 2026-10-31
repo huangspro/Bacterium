@@ -75,15 +75,12 @@ void Bacterium::step()
         grow();
     if (rand() % 100 < 50)
         divide();
-    if (health <= 0)
-        die();
 }
 
 void Bacterium::die(){
     is_alive = false;
     env->has_bacterium = false;
     env->delete_bac();
-    delete this;
 }
 
 void Bacterium::move(){
@@ -101,7 +98,8 @@ void Bacterium::touched(){
 
 }
 
-void Bacterium::divide() {
+Bacterium *Bacterium::divide()
+{
     if(size >= 50){
         Bacterium *newone = new Bacterium(*this);
         newone->health = 100;
@@ -110,8 +108,9 @@ void Bacterium::divide() {
             i.second /= 2;
         for (auto i : this->sub->all)
             i.second /= 2;
-
+        return newone;
     }
+    return nullptr;
 }
 
 void Bacterium::impair_health(double i){
@@ -137,7 +136,7 @@ void Bacterium::grow() {
     sub->change("Lipid_脂质", 0.1);
     sub->change("DNA_RNA_核酸", 0.1);
 
-    size++;
+    size += 10;
 }
 
 void Bacterium::feed()

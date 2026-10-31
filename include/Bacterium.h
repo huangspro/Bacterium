@@ -8,8 +8,6 @@
 
 class Bacterium{
 private:
-    double health;
-    int x, y;
     bool is_touched;
     double size;
     Environment *env;
@@ -17,6 +15,8 @@ private:
 public:
     Substance *sub;
     bool is_alive;
+    int x, y;
+    double health;
 
     Bacterium(int x, int y, Environment *env);
     Bacterium(Bacterium& other);
@@ -24,7 +24,7 @@ public:
     void init_sub();  // init cell substance components
     void die();  // when health is below 0, the cell dies
     void move();  // the cell can move
-    void divide();  // the cell can divide itself into 2 cells, and reallocate the substance
+    Bacterium *divide(); // the cell can divide itself into 2 cells, and reallocate the substance
     void grow();  // the cell can grow its size
     void impair_health(double i);  // health -= i
     void breathe();  // the cell must breathe

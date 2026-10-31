@@ -34,6 +34,7 @@ void World::init(int init_bac_num)
 
 void World::real_time_info()
 {
+    std::cout << "step: " << steps << " --> " << std::flush;
     std::cout << "bacterium number: " << bac_num << std::endl << std::flush;
 }
 
@@ -49,16 +50,52 @@ void World::diffusion()
 
 void World::step()
 {
-    for (auto i : bac_list) {
+    for (auto it = bac_list.begin(); it != bac_list.end(); ) {
+        auto i = *it;
+
+        // cell steps itself
         i->step();
-        steps++;
-        // calculate bac number
-        bac_num = 0;
-        for (auto x : grids)
-            for (auto y : x)
-                if (y->has_bacterium)
-                    bac_num++;
+
+        // divide cell
+        if (bac_num < height * width && rand() % 100 > 50) {
+            int dx[] = {-1, 1, 0, 0};
+            int dy[] = {0, 0, -1, 1};
+
+            for (int d = 0; d < 4; d++) {
+                int nx = i->x + dx[d];
+                int ny = i->y + dy[d];
+
+                if (nx >= 0 && nx < height &&
+                    ny >= 0 && ny < width &&
+                    !grids[nx][ny]->has_bacterium) {
+
+                    Bacterium* newone = i->divide();
+                    grids[nx][ny]->insert_bac(newone);
+                    bac_list.push_back(newone);
+                    break;
+                }
+            }
+        }
+
+        /*// kill a cell
+        if (i->health <= 0) {
+            i->die();
+            delete i;
+            it = bac_list.erase(it);
+        }
+        else {
+            ++it;
+        }*/
     }
+
+    // calculate bac number
+    bac_num = 0;
+    for (auto x : grids)
+        for (auto y : x)
+            if (y->has_bacterium)
+                bac_num++;
+
+    steps++;
 }
 
 void World::draw()
@@ -72,19 +109,9 @@ void World::draw()
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
-void World::kill(int x, int y)
-{
-    Environment *tem = grids[x][y];
-    if (tem->has_bacterium) {
-        if (tem->getBac()->is_alive) {
-            bac_num--;
-            tem->has_bacterium = false;
-            delete tem->getBac();
-        }
-    }
-}
 
 Environment *World::return_env(int x, int y)
 {
