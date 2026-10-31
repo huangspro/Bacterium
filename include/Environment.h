@@ -9,13 +9,12 @@
 class Environment{
 private:
     Substance* sub;
-    Bacterium* bac;
-    int height, width;
+    Bacterium *bac;
     
 public:
     bool has_bacterium;
 
-    Environment(int h, int w);
+    Environment();
     void insert_bac(Bacterium *bac);
     Bacterium* getBac();
     Substance* getSub();

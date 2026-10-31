@@ -1,7 +1,6 @@
 #include "Environment.h"
 
-Environment::Environment(int h, int w):height(h), width(w), has_bacterium(false), sub(new Substance()){
-
+Environment::Environment():has_bacterium(false), sub(new Substance()){
     sub->add("Water_水", 70.0);
     sub->add("Oxygen_氧气", 5.0);
     sub->add("Glucose_葡萄糖", 10.0);
