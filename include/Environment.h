@@ -8,8 +8,8 @@
 // a grid in all environment
 class Environment{
 private:
-    Substance* substance;
-    Bacterium* bacterium;
+    Substance* sub;
+    Bacterium* bac;
     int height, width;
     
 public:
@@ -20,6 +20,7 @@ public:
     void insert_sub(Substance *sub);
     Bacterium* getBac();
     Substance* getSub();
+    ~Environment();
 };
 
 #endif
