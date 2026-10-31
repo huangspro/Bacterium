@@ -19,6 +19,7 @@ public:
     void die();
     void move();
     void touched();
+    ~Bacterium();
 };
 
 #endif

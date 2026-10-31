@@ -13,3 +13,13 @@ void Bacterium::move(){
         y += dy;
     }
 }
+
+
+void Bacterium::touched(){
+
+}
+
+
+Bacterium::~Bacterium(){
+    delete sub;
+}
