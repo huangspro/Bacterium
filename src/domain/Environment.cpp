@@ -33,12 +33,7 @@ Environment::Environment():has_bacterium(false), sub(new Substance()){
 
 void Environment::step()
 {
-    if (has_bacterium)
-        bac->step();
-    if (!bac->is_alive) {
-        for (auto i : bac->sub->all)
-            sub->change(i.first, i.second);
-    }
+
 }
 
 void Environment::insert_bac(Bacterium *bac){
@@ -48,6 +43,15 @@ void Environment::insert_bac(Bacterium *bac){
 
 
 Environment::~Environment(){
-    delete bac;
     delete sub;
+}
+
+Bacterium *Environment::getBac()
+{
+    return bac;
+}
+
+Substance *Environment::getSub()
+{
+    return sub;
 }

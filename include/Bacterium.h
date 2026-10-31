@@ -4,7 +4,7 @@
 
 
 #include "Substance.h"
-
+#include "Environment.h"
 
 class Bacterium{
 private:
@@ -12,12 +12,13 @@ private:
     int x, y;
     bool is_touched;
     double size;
+    Environment *env;
 
 public:
     Substance *sub;
     bool is_alive;
 
-    Bacterium(int x, int y);
+    Bacterium(int x, int y, Environment *env);
     Bacterium(Bacterium& other);
 
     void init_sub();  // init cell substance components

@@ -4,8 +4,7 @@
 #include <vector>
 
 #include "Environment.h"
-
-class Bacterium;
+#include "Bacterium.h"
 
 class World
 {
@@ -14,6 +13,7 @@ private:
     std::vector<Bacterium *> bac_list;  // list of bac
     int bac_num = 0;  // number of alive bacterium
     int height, width;
+    int steps = 0;
 
 public:
     World(int h, int w);

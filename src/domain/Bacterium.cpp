@@ -3,7 +3,7 @@
 #include <ctime>
 
 
-Bacterium::Bacterium(int x, int y):is_alive(true), health(100), is_touched(false), x(x), y(y), size(1){}
+Bacterium::Bacterium(int x, int y, Environment *env):env(env), is_alive(true), health(100), is_touched(false), x(x), y(y), size(1){}
 
 Bacterium::Bacterium(Bacterium &other)
 {
@@ -123,6 +123,15 @@ void Bacterium::grow() {
     sub->change("Lipid_脂质", 0.1);
     sub->change("DNA_RNA_核酸", 0.1);
 
+    env->getSub()->change("Glucose_葡萄糖", -1.0);
+    env->getSub()->change("AminoAcids_氨基酸", -0.5);
+    env->getSub()->change("FattyAcids_脂肪酸", -0.1);
+    env->getSub()->change("Nucleotides_核苷酸", -0.1);
+    env->getSub()->change("ATP_三磷酸腺苷", -0.5);
+    env->getSub()->change("Protein_蛋白质", 0.4);
+    env->getSub()->change("Lipid_脂质", 0.1);
+    env->getSub()->change("DNA_RNA_核酸", 0.1);
+
     size++;
 }
 
@@ -144,6 +153,12 @@ void Bacterium::breathe()
     sub->change("CarbonDioxide_二氧化碳", 6.0);
     sub->change("Water_水", 6.0);
     sub->change("ATP_三磷酸腺苷", 30.0);
+
+    env->getSub()->change("Glucose_葡萄糖", -1.0);
+    env->getSub()->change("Oxygen_氧气", -6.0);
+    env->getSub()->change("CarbonDioxide_二氧化碳", 6.0);
+    env->getSub()->change("Water_水", 6.0);
+    env->getSub()->change("ATP_三磷酸腺苷", 30.0);
 
 }
 
