@@ -11,7 +11,7 @@ class Bacterium;
 // a grid in all environment
 class Environment{
 private:
-    Substance* sub;
+    Substance *sub;
     Bacterium *bac;
     
 public:

@@ -4,24 +4,20 @@
 
 
 #include "Substance.h"
-#include "World.h"
 
-
-class World;
 
 class Bacterium{
 private:
-    Substance *sub;
     double health;
     int x, y;
     bool is_touched;
     double size;
-    World *world;
 
 public:
+    Substance *sub;
     bool is_alive;
 
-    Bacterium(int x, int y, World *w);
+    Bacterium(int x, int y);
     Bacterium(Bacterium& other);
 
     void init_sub();  // init cell substance components

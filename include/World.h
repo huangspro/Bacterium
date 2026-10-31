@@ -5,7 +5,6 @@
 
 #include "Environment.h"
 
-
 class Bacterium;
 
 class World
