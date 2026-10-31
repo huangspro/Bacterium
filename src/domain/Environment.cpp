@@ -1,4 +1,6 @@
 #include "Environment.h"
+#include<iostream>
+
 
 Environment::Environment():has_bacterium(false), sub(new Substance()){
     sub->add("Water_水", 70.0);
@@ -31,10 +33,6 @@ Environment::Environment():has_bacterium(false), sub(new Substance()){
     sub->add("ExtracellularEnzyme_胞外酶", 0.0);
 }
 
-void Environment::step()
-{
-
-}
 
 void Environment::insert_bac(Bacterium *bac){
     has_bacterium = true;
@@ -49,6 +47,11 @@ Environment::~Environment(){
 Bacterium *Environment::getBac()
 {
     return bac;
+}
+
+void Environment::delete_bac()
+{
+    bac = nullptr;
 }
 
 Substance *Environment::getSub()

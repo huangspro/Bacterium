@@ -19,8 +19,7 @@ public:
     void insert_bac(Bacterium *bac);
     Bacterium* getBac();
     Substance* getSub();
-
-    void step();
+    void delete_bac();
 
     ~Environment();
 };

@@ -28,7 +28,7 @@ public:
     void grow();  // the cell can grow its size
     void impair_health(double i);  // health -= i
     void breathe();  // the cell must breathe
-
+    void feed();  // a cell can fetch food
     void step();  // one step of the cell, do every thing
 
     void touched();  // when the cell is touched by other cell, this function will be called

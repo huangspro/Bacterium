@@ -26,6 +26,8 @@ public:
     void kill(int x, int y);  // kill a cell, release its substance
     Environment *return_env(int x, int y);  // return the env of a grid
 
+    void diffusion();
+
     ~World();
 };
 

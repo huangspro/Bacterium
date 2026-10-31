@@ -12,18 +12,22 @@ void World::init(int init_bac_num)
     int tem = 0;
     for (int x = 0; x < height; x++) {
         std::vector<Environment *> new_line;
-        grids.push_back(new_line);
         for (int y = 0; y < width; y++) {
             Environment *new_env = new Environment();
             new_line.push_back(new_env);
-            if (tem < init_bac_num && rand() % 100 > 50) {
-                Bacterium *newbac = new Bacterium(x, y, new_env);
-                bac_list.push_back(newbac);
-                new_env->insert_bac(newbac);
+        }
+        grids.push_back(new_line);
+    }
+    while (tem < init_bac_num) {
+        int temx = rand() % height;
+        int temy = rand() % width;
+        if (!grids[temx][temy]->has_bacterium) {
+            Bacterium *newbac = new Bacterium(temx, temy, grids[temx][temy]);
+            bac_list.push_back(newbac);
+            grids[temx][temy]->insert_bac(newbac);
 
-                tem++;
-                bac_num++;
-            }
+            tem++;
+            bac_num++;
         }
     }
 }
@@ -33,11 +37,22 @@ void World::real_time_info()
     std::cout << "bacterium number: " << bac_num << std::endl << std::flush;
 }
 
+void World::diffusion()
+{
+    for (int x = 0; x < grids.size(); x++) {
+        for (int y = 0; y < grids[x].size(); y++) {
+            if (grids[x][y])
+                break;
+        }
+    }
+}
+
 void World::step()
 {
-    for (auto i : bac_list){
+    for (auto i : bac_list) {
         i->step();
         steps++;
+        // calculate bac number
         bac_num = 0;
         for (auto x : grids)
             for (auto y : x)

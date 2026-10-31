@@ -1,9 +1,19 @@
 #include "Bacterium.h"
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
-
-Bacterium::Bacterium(int x, int y, Environment *env):env(env), is_alive(true), health(100), is_touched(false), x(x), y(y), size(1){}
+Bacterium::Bacterium(int x, int y, Environment *env)
+    : env(env)
+    , is_alive(true)
+    , health(100)
+    , is_touched(false)
+    , x(x)
+    , y(y)
+    , size(1)
+{
+    init_sub();
+}
 
 Bacterium::Bacterium(Bacterium &other)
 {
@@ -15,9 +25,9 @@ Bacterium::Bacterium(Bacterium &other)
     is_touched = other.is_touched;
 
     sub = new Substance();
-    for (auto i : other.sub->all) {
+    for (auto i : other.sub->all)
         this->sub->add(i.first, i.second);
-    }
+
 }
 
 void Bacterium::init_sub() {
@@ -58,8 +68,9 @@ void Bacterium::init_sub() {
 
 void Bacterium::step()
 {
-    move();
+    // move();
     breathe();
+    feed();
     if (rand() % 100 < 70)
         grow();
     if (rand() % 100 < 50)
@@ -70,6 +81,9 @@ void Bacterium::step()
 
 void Bacterium::die(){
     is_alive = false;
+    env->has_bacterium = false;
+    env->delete_bac();
+    delete this;
 }
 
 void Bacterium::move(){
@@ -123,24 +137,110 @@ void Bacterium::grow() {
     sub->change("Lipid_脂质", 0.1);
     sub->change("DNA_RNA_核酸", 0.1);
 
-    env->getSub()->change("Glucose_葡萄糖", -1.0);
-    env->getSub()->change("AminoAcids_氨基酸", -0.5);
-    env->getSub()->change("FattyAcids_脂肪酸", -0.1);
-    env->getSub()->change("Nucleotides_核苷酸", -0.1);
-    env->getSub()->change("ATP_三磷酸腺苷", -0.5);
-    env->getSub()->change("Protein_蛋白质", 0.4);
-    env->getSub()->change("Lipid_脂质", 0.1);
-    env->getSub()->change("DNA_RNA_核酸", 0.1);
-
     size++;
 }
 
+void Bacterium::feed()
+{
+    if (!is_alive || sub == nullptr)
+        return;
+
+    // 获取环境中的物质
+    Substance *env_sub = env->getSub();
+
+    if (env_sub == nullptr)
+        return;
+
+    // 吸收水
+    if (env_sub->get("Water_水") > 0)
+    {
+        double amount = std::min(5.0, env_sub->get("Water_水"));
+        env_sub->change("Water_水", -amount);
+        sub->change("Water_水", amount);
+    }
+    if (env_sub->get("Oxygen_氧气") > 0)
+    {
+        double amount = std::min(6.0, env_sub->get("Oxygen_氧气"));
+        env_sub->change("Oxygen_氧气", -amount);
+        sub->change("Oxygen_氧气", amount);
+    }
+    // 吸收葡萄糖
+    if (env_sub->get("Glucose_葡萄糖") > 0)
+    {
+        double amount = std::min(3.0, env_sub->get("Glucose_葡萄糖"));
+        env_sub->change("Glucose_葡萄糖", -amount);
+        sub->change("Glucose_葡萄糖", amount);
+    }
+
+    // 吸收氨基酸
+    if (env_sub->get("AminoAcids_氨基酸") > 0)
+    {
+        double amount = std::min(1.0, env_sub->get("AminoAcids_氨基酸"));
+        env_sub->change("AminoAcids_氨基酸", -amount);
+        sub->change("AminoAcids_氨基酸", amount);
+    }
+
+    // 吸收脂肪酸
+    if (env_sub->get("FattyAcids_脂肪酸") > 0)
+    {
+        double amount = std::min(0.5, env_sub->get("FattyAcids_脂肪酸"));
+        env_sub->change("FattyAcids_脂肪酸", -amount);
+        sub->change("FattyAcids_脂肪酸", amount);
+    }
+
+    // 吸收核苷酸
+    if (env_sub->get("Nucleotides_核苷酸") > 0)
+    {
+        double amount = std::min(0.5, env_sub->get("Nucleotides_核苷酸"));
+        env_sub->change("Nucleotides_核苷酸", -amount);
+        sub->change("Nucleotides_核苷酸", amount);
+    }
+
+    // 吸收无机磷酸盐
+    if (env_sub->get("Phosphate_无机磷酸盐") > 0)
+    {
+        double amount = std::min(0.5, env_sub->get("Phosphate_无机磷酸盐"));
+        env_sub->change("Phosphate_无机磷酸盐", -amount);
+        sub->change("Phosphate_无机磷酸盐", amount);
+    }
+
+    // 吸收铵离子
+    if (env_sub->get("Ammonium_铵离子") > 0)
+    {
+        double amount = std::min(0.5, env_sub->get("Ammonium_铵离子"));
+        env_sub->change("Ammonium_铵离子", -amount);
+        sub->change("Ammonium_铵离子", amount);
+    }
+
+    // 吸收钾离子
+    if (env_sub->get("Potassium_钾离子") > 0)
+    {
+        double amount = std::min(0.5, env_sub->get("Potassium_钾离子"));
+        env_sub->change("Potassium_钾离子", -amount);
+        sub->change("Potassium_钾离子", amount);
+    }
+
+    // 吸收镁离子
+    if (env_sub->get("Magnesium_镁离子") > 0)
+    {
+        double amount = std::min(0.2, env_sub->get("Magnesium_镁离子"));
+        env_sub->change("Magnesium_镁离子", -amount);
+        sub->change("Magnesium_镁离子", amount);
+    }
+
+    // 吸收钙离子
+    if (env_sub->get("Calcium_钙离子") > 0)
+    {
+        double amount = std::min(0.1, env_sub->get("Calcium_钙离子"));
+        env_sub->change("Calcium_钙离子", -amount);
+        sub->change("Calcium_钙离子", amount);
+    }
+}
 
 void Bacterium::breathe()
 {
     if (!is_alive || sub == nullptr)
         return;
-
     // 检查氧气和葡萄糖是否充足
     if (sub->get("Oxygen_氧气") < 1.0 || sub->get("Glucose_葡萄糖") < 1.0) {
         impair_health(10);
@@ -150,16 +250,13 @@ void Bacterium::breathe()
 
     sub->change("Glucose_葡萄糖", -1.0);
     sub->change("Oxygen_氧气", -6.0);
-    sub->change("CarbonDioxide_二氧化碳", 6.0);
-    sub->change("Water_水", 6.0);
+    sub->change("Water_水", 3.0);
     sub->change("ATP_三磷酸腺苷", 30.0);
 
-    env->getSub()->change("Glucose_葡萄糖", -1.0);
+
     env->getSub()->change("Oxygen_氧气", -6.0);
     env->getSub()->change("CarbonDioxide_二氧化碳", 6.0);
-    env->getSub()->change("Water_水", 6.0);
-    env->getSub()->change("ATP_三磷酸腺苷", 30.0);
-
+    env->getSub()->change("Water_水", 3.0);
 }
 
 Bacterium::~Bacterium(){
