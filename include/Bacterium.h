@@ -4,6 +4,8 @@
 
 
 #include "Substance.h"
+#include "World.h"
+
 
 class World;
 
@@ -19,7 +21,7 @@ private:
 public:
     bool is_alive;
 
-    Bacterium(int x, int y);
+    Bacterium(int x, int y, World *w);
     Bacterium(Bacterium& other);
 
     void init_sub();  // init cell substance components

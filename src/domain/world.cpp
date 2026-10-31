@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-World::World() {}
+World::World(int h,int w):height(h), width(w) {}
 
 void World::init(int init_bac_num)
 {
@@ -32,8 +32,11 @@ void World::real_time_info()
 
 void World::step()
 {
-    for (auto i : bac_list)
-        i->step();
+    for (auto x : grids) {
+        for (auto y : x) {
+            y->step();
+        }
+    }
 }
 
 void World::draw()

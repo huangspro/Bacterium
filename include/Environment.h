@@ -2,8 +2,11 @@
 #define _ENVIRONMENT_H_
 
 
-#include "Bacterium.h"
 #include "Substance.h"
+#include "Bacterium.h"
+
+
+class Bacterium;
 
 // a grid in all environment
 class Environment{
@@ -18,6 +21,9 @@ public:
     void insert_bac(Bacterium *bac);
     Bacterium* getBac();
     Substance* getSub();
+
+    void step();
+
     ~Environment();
 };
 

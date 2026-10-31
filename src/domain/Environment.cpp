@@ -31,6 +31,11 @@ Environment::Environment():has_bacterium(false), sub(new Substance()){
     sub->add("ExtracellularEnzyme_胞外酶", 0.0);
 }
 
+void Environment::step()
+{
+    if (has_bacterium)
+        bac->step();
+}
 
 void Environment::insert_bac(Bacterium *bac){
     has_bacterium = true;

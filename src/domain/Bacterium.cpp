@@ -3,7 +3,7 @@
 #include <ctime>
 
 
-Bacterium::Bacterium(int x, int y):is_alive(true), health(100), is_touched(false), x(x), y(y), size(1){}
+Bacterium::Bacterium(int x, int y, World* w):world(w), is_alive(true), health(100), is_touched(false), x(x), y(y), size(1){}
 
 Bacterium::Bacterium(Bacterium &other)
 {
@@ -13,8 +13,9 @@ Bacterium::Bacterium(Bacterium &other)
     is_alive = other.is_alive;
     health = other.health;
     is_touched = other.is_touched;
-    sub = new Substance();
+    world = other.world;
 
+    sub = new Substance();
     for (auto i : other.sub->all) {
         this->sub->add(i.first, i.second);
     }
@@ -70,6 +71,11 @@ void Bacterium::step()
 
 void Bacterium::die(){
     is_alive = false;
+    Environment *env = world->return_env(x, y);
+    //release substance in the cell
+    for (auto i : sub->all)
+        env->getSub()->change(i.first, i.second);
+
 }
 
 void Bacterium::move(){
@@ -89,13 +95,14 @@ void Bacterium::touched(){
 
 void Bacterium::divide() {
     if(size >= 50){
-        Bacterium newone(*this);
-        newone.health = 100;
+        Bacterium *newone = new Bacterium(*this);
+        newone->health = 100;
         this->health = 100;
-        for (auto i : newone.sub->all)
+        for (auto i : newone->sub->all)
             i.second /= 2;
         for (auto i : this->sub->all)
             i.second /= 2;
+        world->add_bac(newone);
     }
 }
 
@@ -113,19 +120,26 @@ void Bacterium::grow() {
         sub->get("ATP_三磷酸腺苷") < 0.5)
         return;
 
-    // 消耗营养物质
+    Environment *env = world->return_env(x, y);
+
     sub->change("Glucose_葡萄糖", -1.0);
     sub->change("AminoAcids_氨基酸", -0.5);
     sub->change("FattyAcids_脂肪酸", -0.1);
     sub->change("Nucleotides_核苷酸", -0.1);
     sub->change("ATP_三磷酸腺苷", -0.5);
-
-    // 合成细胞物质
     sub->change("Protein_蛋白质", 0.4);
     sub->change("Lipid_脂质", 0.1);
     sub->change("DNA_RNA_核酸", 0.1);
 
-    // 生长
+    env->getSub()->change("Glucose_葡萄糖", 1.0);
+    env->getSub()->change("AminoAcids_氨基酸", 0.5);
+    env->getSub()->change("FattyAcids_脂肪酸", 0.1);
+    env->getSub()->change("Nucleotides_核苷酸", 0.1);
+    env->getSub()->change("ATP_三磷酸腺苷", 0.5);
+    env->getSub()->change("Protein_蛋白质", -0.4);
+    env->getSub()->change("Lipid_脂质", -0.1);
+    env->getSub()->change("DNA_RNA_核酸", -0.1);
+
     size++;
 }
 
@@ -141,16 +155,19 @@ void Bacterium::breathe()
         return;
     }
 
-    // 消耗葡萄糖和氧气
+    Environment *env = world->return_env(x, y);
+
     sub->change("Glucose_葡萄糖", -1.0);
     sub->change("Oxygen_氧气", -6.0);
-
-    // 产生二氧化碳和水
     sub->change("CarbonDioxide_二氧化碳", 6.0);
     sub->change("Water_水", 6.0);
-
-    // 产生 ATP
     sub->change("ATP_三磷酸腺苷", 30.0);
+
+    env->getSub()->change("Glucose_葡萄糖", 1.0);
+    env->getSub()->change("Oxygen_氧气", 6.0);
+    env->getSub()->change("CarbonDioxide_二氧化碳", -6.0);
+    env->getSub()->change("Water_水", -6.0);
+    env->getSub()->change("ATP_三磷酸腺苷", -30.0);
 }
 
 Bacterium::~Bacterium(){
