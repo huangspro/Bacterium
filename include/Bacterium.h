@@ -10,9 +10,9 @@ class Bacterium{
 private:
     bool is_touched;
     double size;
-    Environment *env;
 
 public:
+    Environment *env;
     Substance *sub;
     bool is_alive;
     int x, y;

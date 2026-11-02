@@ -50,8 +50,10 @@ void World::diffusion()
 
 void World::step()
 {
-    for (auto it = bac_list.begin(); it != bac_list.end(); ) {
-        auto i = *it;
+    std::vector<Bacterium *> new_bacteria;
+
+    for (auto it = bac_list.begin(); it != bac_list.end();) {
+        Bacterium *i = *it;
 
         // cell steps itself
         i->step();
@@ -65,31 +67,38 @@ void World::step()
                 int nx = i->x + dx[d];
                 int ny = i->y + dy[d];
 
-                if (nx >= 0 && nx < height &&
-                    ny >= 0 && ny < width &&
-                    !grids[nx][ny]->has_bacterium) {
+                if (nx >= 0 && nx < height && ny >= 0 && ny < width
+                    && !grids[nx][ny]->has_bacterium) {
+                    Bacterium *newone = i->divide();
 
-                    Bacterium* newone = i->divide();
-                    grids[nx][ny]->insert_bac(newone);
-                    bac_list.push_back(newone);
+                    if (newone != nullptr) {
+                        grids[nx][ny]->insert_bac(newone);
+                        new_bacteria.push_back(newone);
+                        newone->env = grids[nx][ny];
+                    }
+
                     break;
                 }
             }
         }
 
-        /*// kill a cell
+        // kill a cell
         if (i->health <= 0) {
             i->die();
             delete i;
             it = bac_list.erase(it);
-        }
-        else {
+        } else {
             ++it;
-        }*/
+        }
+    }
+
+    for (auto bac : new_bacteria) {
+        bac_list.push_back(bac);
     }
 
     // calculate bac number
     bac_num = 0;
+
     for (auto x : grids)
         for (auto y : x)
             if (y->has_bacterium)

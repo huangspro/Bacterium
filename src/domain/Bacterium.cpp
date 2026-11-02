@@ -68,13 +68,11 @@ void Bacterium::init_sub() {
 
 void Bacterium::step()
 {
-    // move();
+    //move();
     breathe();
     feed();
     if (rand() % 100 < 70)
         grow();
-    if (rand() % 100 < 50)
-        divide();
 }
 
 void Bacterium::die(){
@@ -118,7 +116,7 @@ void Bacterium::impair_health(double i){
 }
 
 void Bacterium::grow() {
-    if (!is_alive || sub == nullptr)
+    if (!is_alive || sub == nullptr || env == nullptr)
         return;
 
     // 生长所需原料不足时不生长
@@ -141,7 +139,7 @@ void Bacterium::grow() {
 
 void Bacterium::feed()
 {
-    if (!is_alive || sub == nullptr)
+    if (!is_alive || sub == nullptr || env == nullptr)
         return;
 
     // 获取环境中的物质
@@ -238,7 +236,7 @@ void Bacterium::feed()
 
 void Bacterium::breathe()
 {
-    if (!is_alive || sub == nullptr)
+    if (!is_alive || sub == nullptr || env == nullptr)
         return;
     // 检查氧气和葡萄糖是否充足
     if (sub->get("Oxygen_氧气") < 1.0 || sub->get("Glucose_葡萄糖") < 1.0) {
