@@ -38,27 +38,16 @@ void World::real_time_info()
     std::cout << "bacterium number: " << bac_num << std::endl << std::flush;
 }
 
-void World::diffusion()
+void World::bac_step()
 {
-    for (int x = 0; x < grids.size(); x++) {
-        for (int y = 0; y < grids[x].size(); y++) {
-            if (grids[x][y])
-                break;
-        }
-    }
-}
-
-void World::step()
-{
-    std::vector<Bacterium *> new_bacteria;
-
-    for (auto it = bac_list.begin(); it != bac_list.end();) {
-        Bacterium *i = *it;
-
-        // cell steps itself
+    std::cout << 1;
+    //cell steps itself
+    for (auto i:bac_list)
         i->step();
 
-        // divide cell
+    // divide cell
+    std::vector<Bacterium *> new_bacteria;
+    for (auto i:bac_list) {
         if (bac_num < height * width && rand() % 100 > 50) {
             int dx[] = {-1, 1, 0, 0};
             int dy[] = {0, 0, -1, 1};
@@ -66,23 +55,26 @@ void World::step()
             for (int d = 0; d < 4; d++) {
                 int nx = i->x + dx[d];
                 int ny = i->y + dy[d];
-
                 if (nx >= 0 && nx < height && ny >= 0 && ny < width
                     && !grids[nx][ny]->has_bacterium) {
                     Bacterium *newone = i->divide();
-
                     if (newone != nullptr) {
                         grids[nx][ny]->insert_bac(newone);
                         new_bacteria.push_back(newone);
                         newone->env = grids[nx][ny];
+                        break;
                     }
-
-                    break;
                 }
             }
         }
+    }
+    for (auto bac : new_bacteria) {
+        bac_list.push_back(bac);
+    }
 
-        // kill a cell
+    // kill a cell
+    for (auto it = bac_list.begin(); it != bac_list.end();) {
+        Bacterium *i = *it;
         if (i->health <= 0) {
             i->die();
             delete i;
@@ -91,19 +83,28 @@ void World::step()
             ++it;
         }
     }
+}
+void World::env_step()
+{
+    std::map<std::string, double> sub_list;
+    for (int x = 0; x < grids.size(); x++)
+        for (int y = 0; y < grids[x].size(); y++)
+            for (auto s : grids[x][y]->getSub()->all)
+                sub_list[s.first] += s.second;
+    for (auto i : sub_list)
+        i.second /= height * width;
+}
 
-    for (auto bac : new_bacteria) {
-        bac_list.push_back(bac);
-    }
-
+void World::step()
+{
+    bac_step();
+    env_step();
     // calculate bac number
     bac_num = 0;
-
     for (auto x : grids)
         for (auto y : x)
             if (y->has_bacterium)
                 bac_num++;
-
     steps++;
 }
 
@@ -121,11 +122,6 @@ void World::draw()
     std::cout << std::endl;
 }
 
-
-Environment *World::return_env(int x, int y)
-{
-    return grids[x][y];
-}
 
 World::~World()
 {

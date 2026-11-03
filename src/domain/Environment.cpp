@@ -58,3 +58,18 @@ Substance *Environment::getSub()
 {
     return sub;
 }
+
+void Environment::swap(Environment *other)
+{
+    if (other == nullptr)
+        return;
+    Substance *sub2 = other->sub;
+    for (auto i : sub->all) {
+        double ave = (i.second + sub2->all[i.first])/2;
+        sub->all[i.first] = sub2->all[i.first] = ave;
+    }
+    for (auto i : sub2->all) {
+        double ave = (i.second + sub->all[i.first])/2;
+        sub2->all[i.first] = sub->all[i.first] = ave;
+    }
+}

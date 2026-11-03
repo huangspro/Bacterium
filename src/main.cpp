@@ -9,8 +9,8 @@ int main(){
     newWorld.init(10);
     newWorld.real_time_info();
     newWorld.draw();
-    for (int i = 1; i <= 50; i++) {
-        newWorld.step();newWorld.draw();
+    for (int i = 1; i <= 100; i++) {
+        newWorld.step();
         newWorld.real_time_info();
     }
     newWorld.draw();

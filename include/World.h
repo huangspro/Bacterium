@@ -24,12 +24,10 @@ public:
     void draw();  // output the grids onto the screen
 
     // bacterium operations: To avoid loop independence, must put some cell operation here 
-    void add_bac(Bacterium *bac);
-    void kill(int x, int y);  // kill a cell, release its substance
-    void move(int x, int y); 
+    void bac_step();
 
     // environment operations: To avoid loop independence, must put some environment operation here
-    void diffusion();  // simulate substance diffusion process 
+    void env_step();  // simulate substance diffusion process
 
     ~World();
 };

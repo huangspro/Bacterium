@@ -19,6 +19,7 @@ public:
     void insert_bac(Bacterium *bac);
     Bacterium* getBac();
     Substance* getSub();
+    void swap(Environment* other);  // swap substance between two environment due to resolution difference
     void delete_bac();
 
     ~Environment();
