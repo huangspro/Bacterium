@@ -68,7 +68,6 @@ void Bacterium::init_sub() {
 
 void Bacterium::step()
 {
-    //move();
     breathe();
     feed();
     if (rand() % 100 < 70)
@@ -81,15 +80,6 @@ void Bacterium::die(){
     env->delete_bac();
 }
 
-void Bacterium::move(){
-    int dx[3] = {1, -1, 0};
-    int dy[3] = {1, -1, 0};
-    int i = 0;
-    if(is_alive){
-        x += dx[i];
-        y += dy[i];
-    }
-}
 
 
 void Bacterium::touched(){
