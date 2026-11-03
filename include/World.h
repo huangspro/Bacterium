@@ -16,17 +16,20 @@ private:
     int steps = 0;
 
 public:
+    // global operations
     World(int h, int w);
     void init(int init_bac_num);  // initialize the world
     void step();  // one step of the world
     void real_time_info();  // return current information
     void draw();  // output the grids onto the screen
 
+    // bacterium operations: To avoid loop independence, must put some cell operation here 
     void add_bac(Bacterium *bac);
     void kill(int x, int y);  // kill a cell, release its substance
-    Environment *return_env(int x, int y);  // return the env of a grid
+    void move(int x, int y); 
 
-    void diffusion();
+    // environment operations: To avoid loop independence, must put some environment operation here
+    void diffusion();  // simulate substance diffusion process 
 
     ~World();
 };
