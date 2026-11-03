@@ -4,12 +4,12 @@
 
 Environment::Environment():has_bacterium(false), sub(new Substance()){
     sub->add("Water_水", 70.0);
-    sub->add("Oxygen_氧气", 5.0);
-    sub->add("Glucose_葡萄糖", 10.0);
-    sub->add("AminoAcids_氨基酸", 5.0);
-    sub->add("FattyAcids_脂肪酸", 2.0);
-    sub->add("Nucleotides_核苷酸", 2.0);
-    sub->add("ATP_三磷酸腺苷", 3.0);
+    sub->add("Oxygen_氧气", 10.0);
+    sub->add("Glucose_葡萄糖", 20.0);
+    sub->add("AminoAcids_氨基酸", 50.0);
+    sub->add("FattyAcids_脂肪酸", 20.0);
+    sub->add("Nucleotides_核苷酸", 20.0);
+    sub->add("ATP_三磷酸腺苷", 30.0);
     sub->add("Phosphate_无机磷酸盐", 2.0);
     sub->add("Ammonium_铵离子", 1.0);
     sub->add("Potassium_钾离子", 2.0);

@@ -40,7 +40,6 @@ void World::real_time_info()
 
 void World::bac_step()
 {
-    std::cout << 1;
     //cell steps itself
     for (auto i:bac_list)
         i->step();
@@ -98,7 +97,7 @@ void World::env_step()
 void World::step()
 {
     bac_step();
-    env_step();
+    //env_step();
     // calculate bac number
     bac_num = 0;
     for (auto x : grids)
