@@ -23,7 +23,6 @@ public:
 
     void init_sub();  // init cell substance components
     void die();  // when health is below 0, the cell dies
-    void move();  // the cell can move
     Bacterium *divide(); // the cell can divide itself into 2 cells, and reallocate the substance
     void grow();  // the cell can grow its size
     void impair_health(double i);  // health -= i
