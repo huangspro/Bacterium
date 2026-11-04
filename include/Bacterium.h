@@ -25,7 +25,7 @@ public:
     void die();  // when health is below 0, the cell dies
     Bacterium *divide(); // the cell can divide itself into 2 cells, and reallocate the substance
     void grow();  // the cell can grow its size
-    void impair_health(double i);  // health -= i
+    void check_health();  // check health situation
     void breathe();  // the cell must breathe
     void feed();  // a cell can fetch food
     void step();  // one step of the cell, do every thing

@@ -30,34 +30,46 @@ Bacterium::Bacterium(Bacterium &other)
 
 }
 
+
 void Bacterium::init_sub() {
     sub = new Substance();
 
-    // 生命基本物质
-    sub->add("Water_水", 70.0);
-    sub->add("Oxygen_氧气", 5.0);
-    sub->add("Glucose_葡萄糖", 10.0);
-    sub->add("AminoAcids_氨基酸", 5.0);
-    sub->add("FattyAcids_脂肪酸", 2.0);
-    sub->add("Nucleotides_核苷酸", 2.0);
+    // 水：细胞含水量约占湿重的70%
+    sub->add("Water_水", 38800.0);
+
+    // 能量代谢相关
+    sub->add("Oxygen_氧气", 0.005);
+    sub->add("Glucose_葡萄糖", 0.05);
     sub->add("ATP_三磷酸腺苷", 3.0);
-    sub->add("Phosphate_无机磷酸盐", 2.0);
-    sub->add("Ammonium_铵离子", 1.0);
-    sub->add("Potassium_钾离子", 2.0);
-    sub->add("Magnesium_镁离子", 1.0);
-    sub->add("Calcium_钙离子", 0.5);
-    sub->add("Protein_蛋白质", 5.0);
-    sub->add("Lipid_脂质", 5.0);
-    sub->add("DNA_RNA_核酸", 5.0);
-    // 代谢产物及废物
-    sub->add("CarbonDioxide_二氧化碳", 0.0);
+
+    // 生物合成原料
+    sub->add("AminoAcids_氨基酸", 100.0);
+    sub->add("FattyAcids_脂肪酸", 0.5);
+    sub->add("Nucleotides_核苷酸", 5.0);
+
+    // 无机离子及代谢辅助物质
+    sub->add("Phosphate_无机磷酸盐", 10.0);
+    sub->add("Ammonium_铵离子", 5.0);
+    sub->add("Potassium_钾离子", 200.0);
+    sub->add("Magnesium_镁离子", 10.0);
+    sub->add("Calcium_钙离子", 0.0001);
+
+    // 细胞结构物质
+    sub->add("Protein_蛋白质", 300.0);
+    sub->add("Lipid_脂质", 100.0);
+    sub->add("DNA_RNA_核酸", 100.0);
+
+
+    // 代谢产物及废物（mmol/L）
+    sub->add("CarbonDioxide_二氧化碳", 1.0);
     sub->add("Lactate_乳酸", 0.0);
     sub->add("Acetate_乙酸", 0.0);
     sub->add("Ammonia_氨", 0.0);
     sub->add("Ethanol_乙醇", 0.0);
-    sub->add("ReactiveOxygenSpecies_活性氧", 0.0);
+    sub->add("ReactiveOxygenSpecies_活性氧", 0.000001);
 
-    // 主动释放物质
+
+    // 主动释放物质（细胞内储量，mmol/L）
     sub->add("Toxin_毒素", 0.0);
     sub->add("Bacteriocin_细菌素", 0.0);
     sub->add("QuorumSignal_群体感应信号分子", 0.0);
@@ -65,6 +77,7 @@ void Bacterium::init_sub() {
     sub->add("Siderophore_铁载体", 0.0);
     sub->add("ExtracellularEnzyme_胞外酶", 0.0);
 }
+
 
 void Bacterium::step()
 {
@@ -101,8 +114,8 @@ Bacterium *Bacterium::divide()
     return nullptr;
 }
 
-void Bacterium::impair_health(double i){
-    health -= i;
+void Bacterium::check_health(){
+
 }
 
 void Bacterium::grow() {
@@ -138,6 +151,7 @@ void Bacterium::feed()
     if (env_sub == nullptr)
         return;
 
+    sub->change("CarbonDioxide_二氧化碳", 0.05);
     // 吸收水
     if (env_sub->get("Water_水") > 0)
     {
@@ -146,23 +160,16 @@ void Bacterium::feed()
         sub->change("Water_水", amount);
     }
     if (env_sub->get("Oxygen_氧气") > 0)
-    {
-        double amount = std::min(6.0, env_sub->get("Oxygen_氧气"));
-        env_sub->change("Oxygen_氧气", -amount);
-        sub->change("Oxygen_氧气", amount);
-    }
+        env_sub->change("Oxygen_氧气", -0.05);
+
     // 吸收葡萄糖
     if (env_sub->get("Glucose_葡萄糖") > 0)
-    {
-        double amount = std::min(3.0, env_sub->get("Glucose_葡萄糖"));
-        env_sub->change("Glucose_葡萄糖", -amount);
-        sub->change("Glucose_葡萄糖", amount);
-    }
+        env_sub->change("Glucose_葡萄糖", -1.0);
 
     // 吸收氨基酸
     if (env_sub->get("AminoAcids_氨基酸") > 0)
     {
-        double amount = std::min(1.0, env_sub->get("AminoAcids_氨基酸"));
+        double amount = std::min(0.2, env_sub->get("AminoAcids_氨基酸"));
         env_sub->change("AminoAcids_氨基酸", -amount);
         sub->change("AminoAcids_氨基酸", amount);
     }
@@ -170,7 +177,7 @@ void Bacterium::feed()
     // 吸收脂肪酸
     if (env_sub->get("FattyAcids_脂肪酸") > 0)
     {
-        double amount = std::min(0.5, env_sub->get("FattyAcids_脂肪酸"));
+        double amount = std::min(0.01, env_sub->get("FattyAcids_脂肪酸"));
         env_sub->change("FattyAcids_脂肪酸", -amount);
         sub->change("FattyAcids_脂肪酸", amount);
     }
@@ -178,7 +185,7 @@ void Bacterium::feed()
     // 吸收核苷酸
     if (env_sub->get("Nucleotides_核苷酸") > 0)
     {
-        double amount = std::min(0.5, env_sub->get("Nucleotides_核苷酸"));
+        double amount = std::min(0.1, env_sub->get("Nucleotides_核苷酸"));
         env_sub->change("Nucleotides_核苷酸", -amount);
         sub->change("Nucleotides_核苷酸", amount);
     }
@@ -229,20 +236,20 @@ void Bacterium::breathe()
     if (!is_alive || sub == nullptr || env == nullptr)
         return;
     // 检查氧气和葡萄糖是否充足
-    if (sub->get("Oxygen_氧气") < 1.0 || sub->get("Glucose_葡萄糖") < 1.0) {
-        impair_health(10);
+    if (sub->get("Oxygen_氧气") < 0.05 || sub->get("Glucose_葡萄糖") < 1.0) {
+        health -= 10;
         return;
     }
 
 
     sub->change("Glucose_葡萄糖", -1.0);
-    sub->change("Oxygen_氧气", -6.0);
+    sub->change("Oxygen_氧气", -0.05);
     sub->change("Water_水", 3.0);
     sub->change("ATP_三磷酸腺苷", 30.0);
 
 
     env->getSub()->change("Oxygen_氧气", -6.0);
-    env->getSub()->change("CarbonDioxide_二氧化碳", 6.0);
+    env->getSub()->change("CarbonDioxide_二氧化碳", 0.05);
     env->getSub()->change("Water_水", 3.0);
 }
 

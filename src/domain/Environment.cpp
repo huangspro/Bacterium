@@ -2,22 +2,27 @@
 #include<iostream>
 
 
-Environment::Environment():has_bacterium(false), sub(new Substance()){
-    sub->add("Water_水", 70.0);
-    sub->add("Oxygen_氧气", 10.0);
-    sub->add("Glucose_葡萄糖", 20.0);
-    sub->add("AminoAcids_氨基酸", 50.0);
-    sub->add("FattyAcids_脂肪酸", 20.0);
-    sub->add("Nucleotides_核苷酸", 20.0);
-    sub->add("ATP_三磷酸腺苷", 30.0);
-    sub->add("Phosphate_无机磷酸盐", 2.0);
-    sub->add("Ammonium_铵离子", 1.0);
-    sub->add("Potassium_钾离子", 2.0);
+Environment::Environment()
+    : has_bacterium(false), sub(new Substance()) {
+
+    // 基础物质及营养物质（mmol）
+    sub->add("Water_水", 55500.0);
+    sub->add("Oxygen_氧气", 0.20);
+    sub->add("Glucose_葡萄糖", 10.0);
+    sub->add("AminoAcids_氨基酸", 1.0);
+    sub->add("FattyAcids_脂肪酸", 0.05);
+    sub->add("Nucleotides_核苷酸", 0.0);
+    sub->add("ATP_三磷酸腺苷", 0.0);
+
+    // 无机营养物质
+    sub->add("Phosphate_无机磷酸盐", 10.0);
+    sub->add("Ammonium_铵离子", 5.0);
+    sub->add("Potassium_钾离子", 10.0);
     sub->add("Magnesium_镁离子", 1.0);
-    sub->add("Calcium_钙离子", 0.5);
+    sub->add("Calcium_钙离子", 0.1);
 
     // 代谢产物及废物
-    sub->add("CarbonDioxide_二氧化碳", 0.0);
+    sub->add("CarbonDioxide_二氧化碳", 0.10);
     sub->add("Lactate_乳酸", 0.0);
     sub->add("Acetate_乙酸", 0.0);
     sub->add("Ammonia_氨", 0.0);
